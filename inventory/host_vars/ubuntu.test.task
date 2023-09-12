@@ -1,0 +1,4 @@
+ansible_ssh_host: 54.93.211.63
+encryption:
+  devices: [xvda, xvda14]
+  passphrase: x^PtyjC7^y&nRBq8

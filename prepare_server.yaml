@@ -1,0 +1,4 @@
+- hosts: ubuntu_servers
+  become: yes
+  roles:
+  - server-preparation 

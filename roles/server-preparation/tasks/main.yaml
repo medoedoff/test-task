@@ -1,0 +1,11 @@
+- name: Encrypt devices
+  community.crypto.luks_device:
+    name: '/dev/{{ item }}'
+    device: '/dev/{{ item }}'
+    passphrase: '{{ encryption.passphrase }}'
+    state: present
+    cipher: aes
+    hash: sha256
+  loop: '{{ encryption.devices }}'
+  when: 'encryption is defined'
+
