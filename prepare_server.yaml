@@ -2,3 +2,6 @@
   become: yes
   roles:
   - server-preparation 
+
+  handlers:
+  - import_tasks: handlers/handlers.yaml

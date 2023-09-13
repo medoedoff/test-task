@@ -1,0 +1,8 @@
+- name: update grub
+  shell: /usr/sbin/update-grub
+
+- name: disable ondemand
+  systemd: name=ondemand state=stopped enabled=false
+
+- name: restart cpufrequtils
+  systemd: name=cpufrequtils state=restarted enabled=true
