@@ -34,3 +34,21 @@
 - name: Copy network config
   template: src=network.yaml.j2 dest=/etc/netplan/50-cloud-init.yaml owner=root group=root mode=644
   notify: netplan apply
+
+- name: Display information about the renamed interface
+  shell: ip a show eth0
+  register: ip
+
+- debug: var=ip.stdout_lines
+
+- name: List of CPUs
+  shell: lscpu
+  register: lscpu
+
+- debug: var=lscpu.stdout_lines
+
+- name: Display threads per core
+  shell: lscpu | grep Thread
+  register: threads
+
+- debug: var=threads.stdout
