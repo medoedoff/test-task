@@ -14,7 +14,10 @@
     path: /etc/default/grub
     regexp: '^GRUB_CMDLINE_LINUX='
     line: 'GRUB_CMDLINE_LINUX="cpuidle.off=1"'
-  notify: update grub
+  notify: 
+  - update grub
+  - sync
+  - reboot
 
 - name: Check cpufreq driver is active
   shell: find /sys/devices/system/cpu/cpufreq/ -maxdepth 1 -type d -empty | wc -l
@@ -34,21 +37,3 @@
 - name: Copy network config
   template: src=network.yaml.j2 dest=/etc/netplan/50-cloud-init.yaml owner=root group=root mode=644
   notify: netplan apply
-
-- name: Display information about the renamed interface
-  shell: ip a show eth0
-  register: ip
-
-- debug: var=ip.stdout_lines
-
-- name: List of CPUs
-  shell: lscpu
-  register: lscpu
-
-- debug: var=lscpu.stdout_lines
-
-- name: Display threads per core
-  shell: lscpu | grep Thread
-  register: threads
-
-- debug: var=threads.stdout

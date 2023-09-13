@@ -1,7 +1,27 @@
 - hosts: ubuntu_servers
   become: yes
   roles:
+  - utilities
   - server-preparation 
+
+  post_tasks:
+  - name: Display information about the renamed interface
+    shell: ip a show net0
+    register: ip
+
+  - debug: var=ip.stdout_lines
+
+  - name: List of CPUs
+    shell: lscpu
+    register: lscpu
+
+  - debug: var=lscpu.stdout_lines
+
+  - name: Display threads per core
+    shell: lscpu | grep Thread
+    register: threads
+
+  - debug: var=threads.stdout
 
   handlers:
   - import_tasks: handlers/handlers.yaml

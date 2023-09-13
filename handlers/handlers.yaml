@@ -9,3 +9,13 @@
 
 - name: netplan apply
   shell: echo -ne '\n' | netplan try
+
+- name: sync
+  shell: sync
+
+- name: reboot
+  reboot:
+    msg: 'Running reboot handler...'
+    connect_timeout: 5
+    reboot_timeout: 300
+    test_command: 'echo Machine is started and ready'

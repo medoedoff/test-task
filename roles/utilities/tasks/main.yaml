@@ -1,5 +1,6 @@
 - name: Update cache
-  update_cache: yes
+  apt:
+    update_cache: yes
 
 - name: Install utilities
   apt: 
