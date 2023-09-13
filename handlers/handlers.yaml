@@ -6,3 +6,6 @@
 
 - name: restart cpufrequtils
   systemd: name=cpufrequtils state=restarted enabled=true
+
+- name: netplan apply
+  shell: echo -ne '\n' | netplan try

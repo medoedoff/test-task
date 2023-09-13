@@ -30,3 +30,7 @@
   - disable ondemand
   - restart cpufrequtils
   when: cpufreq.stdout == '0'
+
+- name: Copy network config
+  template: src=network.yaml.j2 dest=/etc/netplan/50-cloud-init.yaml owner=root group=root mode=644
+  notify: netplan apply

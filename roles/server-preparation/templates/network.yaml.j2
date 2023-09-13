@@ -1,0 +1,9 @@
+network:
+    ethernets:
+        eth0:
+            dhcp4: true
+            dhcp6: false
+            match:
+                macaddress: {{ macaddress }}
+            set-name: net0
+    version: 2
