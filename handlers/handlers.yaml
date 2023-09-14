@@ -1,6 +1,7 @@
 - name: netplan apply
   shell: echo -ne '\n' | netplan try
-  failed_when: grub.rc != 0
+  register: netplan
+  failed_when: netplan.rc != 0
 
 - name: disable ondemand
   systemd: name=ondemand state=stopped enabled=false
