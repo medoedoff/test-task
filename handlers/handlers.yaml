@@ -1,5 +1,6 @@
 - name: netplan apply
   shell: echo -ne '\n' | netplan try
+  failed_when: grub.rc != 0
 
 - name: disable ondemand
   systemd: name=ondemand state=stopped enabled=false
@@ -11,6 +12,8 @@
 
 - name: update grub
   shell: /usr/sbin/update-grub
+  register: grub
+  failed_when: grub.rc != 0
 
 - name: sync
   shell: sync
