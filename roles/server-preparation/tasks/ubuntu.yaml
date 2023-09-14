@@ -1,0 +1,39 @@
+- name: Encrypt devices
+  community.crypto.luks_device:
+    name: '/dev/{{ item }}'
+    device: '/dev/{{ item }}'
+    passphrase: '{{ encryption.passphrase }}'
+    state: present
+    cipher: aes
+    hash: sha256
+  loop: '{{ encryption.devices }}'
+  when: 'encryption is defined'
+
+- name: Disable the CPU idle time management entirely
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX='
+    line: 'GRUB_CMDLINE_LINUX="cpuidle.off=1"'
+  notify: 
+  - update grub
+  - sync
+  - reboot
+
+- name: Check cpufreq driver is active
+  shell: find /sys/devices/system/cpu/cpufreq/ -maxdepth 1 -type d -empty | wc -l
+  register: cpufreq
+
+- name: Change governor to performance
+  lineinfile:
+    path: /etc/default/cpufrequtils
+    regexp: '^GOVERNOR='
+    line: 'GOVERNOR="performance"'
+    create: yes
+  notify: 
+  - disable ondemand
+  - restart cpufrequtils
+  when: cpufreq.stdout == '0'
+
+- name: Copy network config
+  template: src=network.yaml.j2 dest=/etc/netplan/50-cloud-init.yaml owner=root group=root mode=644
+  notify: netplan apply

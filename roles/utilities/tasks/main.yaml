@@ -1,9 +1,1 @@
-- name: Update cache
-  apt:
-    update_cache: yes
-
-- name: Install utilities
-  apt: 
-    pkg:
-    - cpufrequtils
-    state: present
+- include_tasks: "{{ ansible_distribution.lower() }}.yaml"
