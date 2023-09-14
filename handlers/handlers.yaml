@@ -1,14 +1,16 @@
-- name: update grub
-  shell: /usr/sbin/update-grub
+- name: netplan apply
+  shell: echo -ne '\n' | netplan try
 
 - name: disable ondemand
   systemd: name=ondemand state=stopped enabled=false
+  register: result_systemd_stop
+  failed_when: "result_systemd_stop is failed and 'Could not find the requested service' not in result_systemd_stop.msg"
 
 - name: restart cpufrequtils
   systemd: name=cpufrequtils state=restarted enabled=true
 
-- name: netplan apply
-  shell: echo -ne '\n' | netplan try
+- name: update grub
+  shell: /usr/sbin/update-grub
 
 - name: sync
   shell: sync
